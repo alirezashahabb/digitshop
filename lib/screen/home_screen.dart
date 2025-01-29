@@ -1,7 +1,7 @@
-import 'package:apple_shop/screen/widget/banner_slider.dart';
-import 'package:apple_shop/screen/widget/category_section.dart';
-import 'package:apple_shop/screen/widget/product_items.dart';
 import 'package:apple_shop/theme.dart';
+import 'package:apple_shop/widget/banner_slider.dart';
+import 'package:apple_shop/widget/category_section.dart';
+import 'package:apple_shop/widget/product_items.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {

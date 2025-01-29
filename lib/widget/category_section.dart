@@ -1,4 +1,4 @@
-import 'package:apple_shop/screen/widget/categroy_items.dart';
+import 'package:apple_shop/widget/categroy_items.dart';
 import 'package:flutter/material.dart';
 
 class CategorySection extends StatelessWidget {

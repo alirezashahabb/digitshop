@@ -1,9 +1,12 @@
-import 'package:apple_shop/screen/home_screen.dart';
+import 'package:apple_shop/screen/test_screen.dart';
 import 'package:apple_shop/theme.dart';
+import 'package:apple_shop/utils/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() {
+void main() async {
+  // init get it
+  await getItInit();
   runApp(const MyApp());
 }
 
@@ -25,7 +28,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'AppleShop',
       theme: lightThemeData(),
-      home: const HomeScreen(),
+      home: const TestScreen(),
     );
   }
 }

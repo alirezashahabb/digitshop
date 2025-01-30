@@ -1,4 +1,3 @@
-import 'package:apple_shop/data/datasource/auth_datasource.dart';
 import 'package:flutter/material.dart';
 
 class TestScreen extends StatelessWidget {
@@ -9,9 +8,13 @@ class TestScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-            onPressed: () {
-              var auth = AuthremoteDataSource();
-              auth.register('alirezarfmk', '1234567890', '1234567890');
+            onPressed: () async {
+              // var either = await AuthRepositroy().register();
+              // either.fold((error) {
+              //   print(error);
+              // }, (message) {
+              //   print(message);
+              // });
             },
             child: Text('Test')),
       ),

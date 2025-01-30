@@ -9,6 +9,10 @@ abstract class IAuthRepositroy {
     String password,
     String confirmePassword,
   );
+  Future<Either<String, String>> login(
+    String userName,
+    String password,
+  );
 }
 
 class AuthRepositroy extends IAuthRepositroy {
@@ -22,11 +26,24 @@ class AuthRepositroy extends IAuthRepositroy {
   ) async {
     try {
       await authremoteDataSource.register(
-        'alirezashhnb',
-        '1234567890',
-        '1234567890',
+        userName,
+        password,
+        confirmePassword,
       );
       return right('ثبت نام انجام شد');
+    } on ApiException catch (e) {
+      return left(e.message ?? 'خطایی رخ داده هست');
+    }
+  }
+
+  @override
+  Future<Either<String, String>> login(String userName, String password) async {
+    try {
+      await authremoteDataSource.login(
+        userName,
+        password,
+      );
+      return right('شما با موفقیت وارد شدید');
     } on ApiException catch (e) {
       return left(e.message ?? 'خطایی رخ داده هست');
     }

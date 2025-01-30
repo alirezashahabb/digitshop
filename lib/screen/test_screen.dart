@@ -1,3 +1,4 @@
+import 'package:apple_shop/data/repository/auth_repositroy.dart';
 import 'package:flutter/material.dart';
 
 class TestScreen extends StatelessWidget {
@@ -9,12 +10,15 @@ class TestScreen extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
             onPressed: () async {
-              // var either = await AuthRepositroy().register();
-              // either.fold((error) {
-              //   print(error);
-              // }, (message) {
-              //   print(message);
-              // });
+              var either = await AuthRepositroy().login(
+                'alirezash',
+                '12345678',
+              );
+              either.fold((error) {
+                print(error);
+              }, (message) {
+                print(message);
+              });
             },
             child: Text('Test')),
       ),

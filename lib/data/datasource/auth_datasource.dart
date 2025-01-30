@@ -8,6 +8,10 @@ abstract class IAuthRemoteDataSorce {
     String password,
     String confirmePassword,
   );
+  Future<String> login(
+    String userName,
+    String password,
+  );
 }
 
 class AuthremoteDataSource extends IAuthRemoteDataSorce {
@@ -29,5 +33,27 @@ class AuthremoteDataSource extends IAuthRemoteDataSorce {
     } catch (ex) {
       throw ApiException(0, 'خطا نا مشخص');
     }
+  }
+
+  // login
+  @override
+  Future<String> login(String userName, String password) async {
+    try {
+      Response response = await httpClient.post(
+        'users/auth-with-password',
+        data: {
+          'identity': userName,
+          'password': password,
+        },
+      );
+      if (response.statusCode == 200) {
+        return response.data?['token'];
+      }
+    } on DioException catch (ex) {
+      throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
+    } catch (ex) {
+      throw ApiException(0, 'خطا نا مشخص');
+    }
+    return '';
   }
 }

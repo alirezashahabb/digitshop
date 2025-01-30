@@ -39,11 +39,15 @@ class AuthRepositroy extends IAuthRepositroy {
   @override
   Future<Either<String, String>> login(String userName, String password) async {
     try {
-      await authremoteDataSource.login(
+      String token = await authremoteDataSource.login(
         userName,
         password,
       );
-      return right('شما با موفقیت وارد شدید');
+      if (token.isNotEmpty) {
+        return right('شما با موفقیت وارد شدید');
+      } else {
+        return left('در ورود خطایی رخ داده هست');
+      }
     } on ApiException catch (e) {
       return left(e.message ?? 'خطایی رخ داده هست');
     }

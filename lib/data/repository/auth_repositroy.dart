@@ -2,6 +2,7 @@ import 'package:apple_shop/data/datasource/auth_datasource.dart';
 import 'package:apple_shop/utils/api_exception.dart';
 import 'package:apple_shop/utils/di.dart';
 import 'package:dartz/dartz.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IAuthRepositroy {
   Future<Either<String, String>> register(
@@ -17,6 +18,7 @@ abstract class IAuthRepositroy {
 
 class AuthRepositroy extends IAuthRepositroy {
   final IAuthRemoteDataSorce authremoteDataSource = locator.get();
+  final SharedPreferences sharedPreferences = locator.get();
 
   @override
   Future<Either<String, String>> register(
@@ -44,6 +46,10 @@ class AuthRepositroy extends IAuthRepositroy {
         password,
       );
       if (token.isNotEmpty) {
+        sharedPreferences.setString(
+          'token',
+          token,
+        );
         return right('شما با موفقیت وارد شدید');
       } else {
         return left('در ورود خطایی رخ داده هست');

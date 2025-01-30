@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
+  //SharePrefance
+  WidgetsFlutterBinding.ensureInitialized();
   // init get it
   await getItInit();
+
   runApp(const MyApp());
 }
 

@@ -1,7 +1,9 @@
+import 'package:apple_shop/bloc/auth/auth_bloc.dart';
 import 'package:apple_shop/screen/auth_screen.dart';
 import 'package:apple_shop/theme.dart';
 import 'package:apple_shop/utils/di.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
@@ -10,7 +12,14 @@ void main() async {
   // init get it
   await getItInit();
 
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(
+        create: (context) => AuthBloc(),
+      ),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

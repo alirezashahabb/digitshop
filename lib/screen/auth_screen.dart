@@ -1,6 +1,10 @@
+import 'package:apple_shop/bloc/auth/auth_bloc.dart';
 import 'package:apple_shop/gen/assets.gen.dart';
+import 'package:apple_shop/screen/home_screen.dart';
 import 'package:apple_shop/theme.dart';
+import 'package:apple_shop/utils/snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -11,9 +15,12 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final FormKey = GlobalKey<FormState>();
-  final TextEditingController userName = TextEditingController();
-  final TextEditingController password = TextEditingController();
+  final TextEditingController userName =
+      TextEditingController(text: 'alirezash');
+  final TextEditingController password =
+      TextEditingController(text: '12345678');
   bool isScure = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,22 +102,59 @@ class _AuthScreenState extends State<AuthScreen> {
                         SizedBox(
                           width: 150,
                           height: 50,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (FormKey.currentState!.validate()) {
-                                print('1');
+                          child: BlocConsumer<AuthBloc, AuthState>(
+                            listener: (context, state) {
+                              if (state is AutResponseState) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeScreen(),
+                                  ),
+                                );
+                                state.response.fold(
+                                  (r) {
+                                    return showCustomAlert(context, r);
+                                  },
+                                  (l) {
+                                    return showCustomAlert(
+                                      context,
+                                      l,
+                                    );
+                                  },
+                                );
                               }
                             },
-                            child: Text(
-                              'ورود به اپل شاپ',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: AppColor.scaffoldColor,
-                                    fontWeight: FontWeight.bold,
+                            builder: (context, state) {
+                              if (state is AuthInitSate) {
+                                return ElevatedButton(
+                                  onPressed: () {
+                                    if (FormKey.currentState!.validate()) {
+                                      BlocProvider.of<AuthBloc>(context).add(
+                                        AuthLoginEvent(
+                                            userName: userName.text,
+                                            password: password.text),
+                                      );
+                                    }
+                                  },
+                                  child: Text(
+                                    'ورود به اپل شاپ',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: AppColor.scaffoldColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
-                            ),
+                                );
+                              } else if (state is AuthLoadingSate) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else if (state is AutResponseState) {
+                                return SizedBox();
+                              }
+                              throw Exception('State not support');
+                            },
                           ),
                         )
                       ],

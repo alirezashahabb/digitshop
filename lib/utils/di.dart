@@ -1,4 +1,5 @@
 import 'package:apple_shop/data/datasource/auth_datasource.dart';
+import 'package:apple_shop/data/datasource/category_datasource.dart';
 import 'package:apple_shop/data/repository/auth_repositroy.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -18,6 +19,9 @@ Future<void> getItInit() async {
   // dataSporce
   locator.registerFactory<IAuthRemoteDataSorce>(
     () => AuthremoteDataSource(),
+  );
+  locator.registerFactory<ICategoryDataSource>(
+    () => CategoryRemoteDataSorce(),
   );
 
   //Repositroy

@@ -36,12 +36,11 @@ class HomeScreen extends StatelessWidget {
                     Image.asset('assets/img/icon_search.png'),
                     Expanded(
                       child: TextField(
-                        style: themeData.textTheme.bodyMedium,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'جستجوی محصولات',
-                        ),
-                      ),
+                          style: themeData.textTheme.bodyMedium,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'جستجوی محصولات',
+                          )),
                     ),
                     Image.asset('assets/img/icon_apple_blue.png'),
                   ],

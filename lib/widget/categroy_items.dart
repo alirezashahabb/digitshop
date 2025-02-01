@@ -1,8 +1,8 @@
 import 'package:apple_shop/theme.dart';
 import 'package:flutter/material.dart';
 
-class CategoryItem extends StatelessWidget {
-  const CategoryItem({
+class CategoryItems extends StatelessWidget {
+  const CategoryItems({
     super.key,
   });
 

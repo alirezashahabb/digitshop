@@ -1,4 +1,5 @@
 import 'package:apple_shop/data/repository/auth_repositroy.dart';
+import 'package:apple_shop/data/repository/category_repositroy.dart';
 import 'package:apple_shop/utils/auth_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,19 @@ class TestScreen extends StatelessWidget {
                 AuthManager.logout();
               },
               child: Text('LogOut'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                var either = await CategoryRepositroy().getCategory();
+                either.fold((l) {
+                  print(l);
+                }, (r) {
+                  for (var element in r) {
+                    print(element.title);
+                  }
+                });
+              },
+              child: Text('Test'),
             ),
             ValueListenableBuilder(
               valueListenable: AuthManager.authChangeNotifire,

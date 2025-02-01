@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 ThemeData lightThemeData() {
   return ThemeData(
+    useMaterial3: false,
     inputDecorationTheme: InputDecorationTheme(
-      labelStyle: TextStyle(
-        fontSize: 14,
-      ),
+      labelStyle: TextStyle(fontSize: 14, fontFamily: 'Shabnam'),
       contentPadding: EdgeInsets.all(
         12,
       ),

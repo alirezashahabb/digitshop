@@ -1,4 +1,5 @@
 import 'package:apple_shop/data/datasource/auth_datasource.dart';
+import 'package:apple_shop/data/datasource/banner_dataSorce.dart';
 import 'package:apple_shop/data/datasource/category_datasource.dart';
 import 'package:apple_shop/data/repository/auth_repositroy.dart';
 import 'package:apple_shop/data/repository/category_repositroy.dart';
@@ -23,6 +24,9 @@ Future<void> getItInit() async {
   );
   locator.registerFactory<ICategoryDataSource>(
     () => CategoryRemoteDataSorce(),
+  );
+  locator.registerFactory<IBannerDataSorce>(
+    () => BannerRemoteDataSorce(),
   );
 
   //Repositroy

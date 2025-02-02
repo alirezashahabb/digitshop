@@ -1,4 +1,5 @@
 import 'package:apple_shop/bloc/auth/auth_bloc.dart';
+import 'package:apple_shop/bloc/category/category_bloc.dart';
 import 'package:apple_shop/screen/category_screen.dart';
 import 'package:apple_shop/theme.dart';
 import 'package:apple_shop/utils/di.dart';
@@ -16,6 +17,9 @@ void main() async {
     providers: [
       BlocProvider(
         create: (context) => AuthBloc(),
+      ),
+      BlocProvider(
+        create: (context) => CategoryBloc(),
       ),
     ],
     child: MyApp(),

@@ -12,11 +12,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   final IcategoryRepositroy repositroy = locator.get();
   CategoryBloc()
       : super(
-          CategoryLoadingState(),
+          CategoryInitState(),
         ) {
     on<CategoryEvent>((event, emit) async {
       if (event is CategoryInitEvent) {
-        emit(CategoryLoadingState());
+        emit(CategoryInitState());
         var response = await repositroy.getCategory();
         emit(CategoryRepoanseState(items: response));
       }

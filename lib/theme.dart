@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 ThemeData lightThemeData() {
   return ThemeData(
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColor.scaffoldColor,
+      backgroundColor: Colors.white,
       elevation: 0,
     ),
     useMaterial3: false,

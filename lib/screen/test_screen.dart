@@ -35,7 +35,7 @@ class TestScreen extends StatelessWidget {
                   print(l);
                 }, (r) {
                   for (var element in r) {
-                    print(element.title);
+                    print(element.thumbnail);
                   }
                 });
               },

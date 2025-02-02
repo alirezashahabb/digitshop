@@ -27,7 +27,8 @@ class CategoryItemsModel {
     created = json['created'];
     icon = json['icon'];
     id = json['id'];
-    thumbnail = json['thumbnail'];
+    thumbnail =
+        'https://startflutter.ir/api/files/$collectionId/$id/${json['thumbnail']}';
     title = json['title'];
     updated = json['updated'];
   }

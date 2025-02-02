@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 ThemeData lightThemeData() {
   return ThemeData(
+    appBarTheme: AppBarTheme(
+      backgroundColor: AppColor.scaffoldColor,
+      elevation: 0,
+    ),
     useMaterial3: false,
     inputDecorationTheme: InputDecorationTheme(
       labelStyle: TextStyle(fontSize: 14, fontFamily: 'Shabnam'),

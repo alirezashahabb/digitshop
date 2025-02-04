@@ -43,7 +43,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
           BlocBuilder<CategoryBloc, CategoryState>(
             builder: (context, state) {
               if (state is CategoryInitState) {
-                return SliverToBoxAdapter(child: SizedBox());
+                return SliverToBoxAdapter(
+                  child: CircularProgressIndicator(),
+                );
               } else if (state is CategoryRepoanseState) {
                 return state.items.fold(
                   (error) {

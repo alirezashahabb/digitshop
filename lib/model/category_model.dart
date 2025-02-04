@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class CategoryItemsModel {
   String? collectionId;
   String? collectionName;
@@ -25,10 +27,12 @@ class CategoryItemsModel {
     collectionName = json['collectionName'];
     color = json['color'];
     created = json['created'];
-    icon = json['icon'];
+
     id = json['id'];
     thumbnail =
         'https://startflutter.ir/api/files/$collectionId/$id/${json['thumbnail']}';
+    icon =
+        'https://startflutter.ir/api/files/$collectionId/$id/${json['icon']}';
     title = json['title'];
     updated = json['updated'];
   }
@@ -45,5 +49,10 @@ class CategoryItemsModel {
     data['title'] = title;
     data['updated'] = updated;
     return data;
+  }
+
+  // Convert the hex color string to a Flutter Color
+  Color getColor() {
+    return Color(int.parse('0xff$color'));
   }
 }

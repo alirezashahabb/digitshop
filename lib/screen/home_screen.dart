@@ -1,5 +1,6 @@
 import 'package:apple_shop/bloc/home/home_bloc.dart';
 import 'package:apple_shop/model/banner_model.dart';
+import 'package:apple_shop/model/category_model.dart';
 import 'package:apple_shop/theme.dart';
 import 'package:apple_shop/widget/banner_slider.dart';
 import 'package:apple_shop/widget/category_section.dart';
@@ -52,19 +53,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     pageController: pageController,
                     banner: response,
                   );
-                })
-              },
-              SliverToBoxAdapter(
-                child: Text(
-                  'دسته بندی',
-                  textAlign: TextAlign.start,
-                  style: themeData.textTheme.bodyMedium!.copyWith(
-                    color: AppColor.secondaryColor,
-                    fontWeight: FontWeight.w600,
+                }),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                    child: Text(
+                      'دسته بندی',
+                      textAlign: TextAlign.start,
+                      style: themeData.textTheme.bodyMedium!.copyWith(
+                        color: AppColor.secondaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              GetCategory(),
+                state.category.fold((error) {
+                  return SliverToBoxAdapter(
+                    child: Text(error),
+                  );
+                }, (response) {
+                  return GetCategory(categories: response);
+                }),
+              },
               SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,14 +118,18 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class GetCategory extends StatelessWidget {
+  final List<CategoryItemsModel> categories;
   const GetCategory({
     super.key,
+    required this.categories,
   });
 
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: CategorySection(),
+      child: CategorySection(
+        categories: categories,
+      ),
     );
   }
 }

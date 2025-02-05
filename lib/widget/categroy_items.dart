@@ -38,7 +38,7 @@ class CategoryItems extends StatelessWidget {
               width: 30,
               height: 30,
               child: Padding(
-                padding: const EdgeInsets.all(13.0),
+                padding: const EdgeInsets.all(18.0),
                 child: ImageLoadingService(
                   mainImage: categoryItems.icon!,
                 ),
@@ -46,6 +46,9 @@ class CategoryItems extends StatelessWidget {
             )),
         Text(
           categoryItems.title!,
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
         )
       ],
     );

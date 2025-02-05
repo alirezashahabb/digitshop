@@ -1,12 +1,16 @@
 import 'package:apple_shop/gen/assets.gen.dart';
+import 'package:apple_shop/model/product_model.dart';
 import 'package:apple_shop/theme.dart';
+import 'package:apple_shop/utils/image_loading_service.dart';
 import 'package:flutter/material.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 
 class ProductItems extends StatelessWidget {
+  final ProductModel product;
   const ProductItems({
     super.key,
     required this.themeData,
+    required this.product,
   });
 
   final ThemeData themeData;
@@ -22,20 +26,23 @@ class ProductItems extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
-        spacing: 10,
+        spacing: 12,
         children: [
           Stack(
             clipBehavior: Clip.none,
             children: [
-              Assets.img.iphone.image(),
+              SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: ImageLoadingService(mainImage: product.thumbnail!)),
               Positioned(
                 top: 0,
-                right: -28,
+                right: -24,
                 child: Assets.img.activeFavProduct.image(),
               ),
               Positioned(
                 bottom: -10,
-                left: -33,
+                left: -28,
                 child: Container(
                   alignment: Alignment.center,
                   width: 36,
@@ -44,7 +51,7 @@ class ProductItems extends StatelessWidget {
                     color: AppColor.redColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Text('20%',
+                  child: Text('${product.persent!.round().toString()}%',
                       style: themeData.textTheme.bodySmall!.copyWith(
                         color: AppColor.whiteColor,
                         fontSize: 12,
@@ -53,12 +60,22 @@ class ProductItems extends StatelessWidget {
               )
             ],
           ),
-          Text(
-            'آیفون 13 پرومکس',
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
+          Padding(
+            padding: const EdgeInsets.only(
+              right: 8,
+            ),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                product.name!,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ),
           ),
           Spacer(),
           Container(
@@ -90,7 +107,7 @@ class ProductItems extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '49000000'.seRagham(),
+                        '${product.price}'.seRagham(),
                         style: themeData.textTheme.bodyMedium!.copyWith(
                             color: AppColor.whiteColor,
                             decoration: TextDecoration.lineThrough,
@@ -98,7 +115,7 @@ class ProductItems extends StatelessWidget {
                             fontSize: 12),
                       ),
                       Text(
-                        '45000000'.seRagham(),
+                        '${product.realPeice}'.seRagham(),
                         style: themeData.textTheme.bodyMedium!.copyWith(
                             color: AppColor.whiteColor,
                             fontWeight: FontWeight.bold,

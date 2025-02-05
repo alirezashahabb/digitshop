@@ -1,6 +1,7 @@
 import 'package:apple_shop/bloc/home/home_bloc.dart';
 import 'package:apple_shop/model/banner_model.dart';
 import 'package:apple_shop/model/category_model.dart';
+import 'package:apple_shop/model/product_model.dart';
 import 'package:apple_shop/theme.dart';
 import 'package:apple_shop/widget/banner_slider.dart';
 import 'package:apple_shop/widget/category_section.dart';
@@ -74,42 +75,132 @@ class _HomeScreenState extends State<HomeScreen> {
                 }, (response) {
                   return GetCategory(categories: response);
                 }),
-              },
-              SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'پرفروش ترین ها',
-                      textAlign: TextAlign.start,
-                      style: themeData.textTheme.bodyMedium!.copyWith(
-                        color: AppColor.secondaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Row(
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'مشاهده همه',
-                            style: themeData.textTheme.bodyMedium!.copyWith(
-                              color: AppColor.mainColor,
-                            ),
+                        Text(
+                          'پر بازدید ترین ها',
+                          textAlign: TextAlign.start,
+                          style: themeData.textTheme.bodyMedium!.copyWith(
+                            color: AppColor.secondaryColor,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        Image.asset(
-                          'assets/img/icon_left_categroy.png',
-                        ),
+                        Row(
+                          children: [
+                            TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                'مشاهده همه',
+                                style: themeData.textTheme.bodyMedium!.copyWith(
+                                  color: AppColor.mainColor,
+                                ),
+                              ),
+                            ),
+                            Image.asset(
+                              'assets/img/icon_left_categroy.png',
+                            ),
+                          ],
+                        )
                       ],
-                    )
-                  ],
+                    ),
+                  ),
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: ProductItems(themeData: themeData),
-              )
+                state.hottestProduct.fold((error) {
+                  return SliverToBoxAdapter(
+                    child: Text(error),
+                  );
+                }, (response) {
+                  return SliverToBoxAdapter(
+                    child: ProductBestSellerList(
+                      productItems: response,
+                      themeData: themeData,
+                    ),
+                  );
+                }),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'پر فروش ترین ها',
+                          textAlign: TextAlign.start,
+                          style: themeData.textTheme.bodyMedium!.copyWith(
+                            color: AppColor.secondaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                'مشاهده همه',
+                                style: themeData.textTheme.bodyMedium!.copyWith(
+                                  color: AppColor.mainColor,
+                                ),
+                              ),
+                            ),
+                            Image.asset(
+                              'assets/img/icon_left_categroy.png',
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                state.bsetSellerProducts.fold((error) {
+                  return SliverToBoxAdapter(
+                    child: Text(error),
+                  );
+                }, (response) {
+                  return SliverToBoxAdapter(
+                    child: ProductBestSellerList(
+                      productItems: response,
+                      themeData: themeData,
+                    ),
+                  );
+                }),
+              },
             ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ===========================================>>>>>>>>>>>ProductBestSellerList
+class ProductBestSellerList extends StatelessWidget {
+  const ProductBestSellerList({
+    super.key,
+    required this.themeData,
+    required this.productItems,
+  });
+
+  final ThemeData themeData;
+  final List<ProductModel> productItems;
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 240,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: ProductItems(
+              themeData: themeData,
+              product: productItems[index],
+            ),
           );
         },
       ),

@@ -42,132 +42,135 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: CircularProgressIndicator(),
                   ),
                 )
-              },
-              GetSearchBox(themeData: themeData),
-              if (state is HomeSuccesState) ...{
-                state.banner.fold((error) {
-                  return SliverToBoxAdapter(
-                    child: Text(error),
-                  );
-                }, (response) {
-                  return GetBanner(
-                    pageController: pageController,
-                    banner: response,
-                  );
-                }),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                    child: Text(
-                      'دسته بندی',
-                      textAlign: TextAlign.start,
-                      style: themeData.textTheme.bodyMedium!.copyWith(
-                        color: AppColor.secondaryColor,
-                        fontWeight: FontWeight.w600,
+              } else ...{
+                GetSearchBox(themeData: themeData),
+                if (state is HomeSuccesState) ...{
+                  state.banner.fold((error) {
+                    return SliverToBoxAdapter(
+                      child: Text(error),
+                    );
+                  }, (response) {
+                    return GetBanner(
+                      pageController: pageController,
+                      banner: response,
+                    );
+                  }),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      child: Text(
+                        'دسته بندی',
+                        textAlign: TextAlign.start,
+                        style: themeData.textTheme.bodyMedium!.copyWith(
+                          color: AppColor.secondaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                state.category.fold((error) {
-                  return SliverToBoxAdapter(
-                    child: Text(error),
-                  );
-                }, (response) {
-                  return GetCategory(categories: response);
-                }),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'پر بازدید ترین ها',
-                          textAlign: TextAlign.start,
-                          style: themeData.textTheme.bodyMedium!.copyWith(
-                            color: AppColor.secondaryColor,
-                            fontWeight: FontWeight.w600,
+                  state.category.fold((error) {
+                    return SliverToBoxAdapter(
+                      child: Text(error),
+                    );
+                  }, (response) {
+                    return GetCategory(categories: response);
+                  }),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'پر بازدید ترین ها',
+                            textAlign: TextAlign.start,
+                            style: themeData.textTheme.bodyMedium!.copyWith(
+                              color: AppColor.secondaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'مشاهده همه',
-                                style: themeData.textTheme.bodyMedium!.copyWith(
-                                  color: AppColor.mainColor,
+                          Row(
+                            children: [
+                              TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'مشاهده همه',
+                                  style:
+                                      themeData.textTheme.bodyMedium!.copyWith(
+                                    color: AppColor.mainColor,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Image.asset(
-                              'assets/img/icon_left_categroy.png',
-                            ),
-                          ],
-                        )
-                      ],
+                              Image.asset(
+                                'assets/img/icon_left_categroy.png',
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                state.hottestProduct.fold((error) {
-                  return SliverToBoxAdapter(
-                    child: Text(error),
-                  );
-                }, (response) {
-                  return SliverToBoxAdapter(
-                    child: ProductBestSellerList(
-                      productItems: response,
-                      themeData: themeData,
-                    ),
-                  );
-                }),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'پر فروش ترین ها',
-                          textAlign: TextAlign.start,
-                          style: themeData.textTheme.bodyMedium!.copyWith(
-                            color: AppColor.secondaryColor,
-                            fontWeight: FontWeight.w600,
+                  state.hottestProduct.fold((error) {
+                    return SliverToBoxAdapter(
+                      child: Text(error),
+                    );
+                  }, (response) {
+                    return SliverToBoxAdapter(
+                      child: ProductBestSellerList(
+                        productItems: response,
+                        themeData: themeData,
+                      ),
+                    );
+                  }),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'پر فروش ترین ها',
+                            textAlign: TextAlign.start,
+                            style: themeData.textTheme.bodyMedium!.copyWith(
+                              color: AppColor.secondaryColor,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'مشاهده همه',
-                                style: themeData.textTheme.bodyMedium!.copyWith(
-                                  color: AppColor.mainColor,
+                          Row(
+                            children: [
+                              TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'مشاهده همه',
+                                  style:
+                                      themeData.textTheme.bodyMedium!.copyWith(
+                                    color: AppColor.mainColor,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Image.asset(
-                              'assets/img/icon_left_categroy.png',
-                            ),
-                          ],
-                        )
-                      ],
+                              Image.asset(
+                                'assets/img/icon_left_categroy.png',
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                state.bsetSellerProducts.fold((error) {
-                  return SliverToBoxAdapter(
-                    child: Text(error),
-                  );
-                }, (response) {
-                  return SliverToBoxAdapter(
-                    child: ProductBestSellerList(
-                      productItems: response,
-                      themeData: themeData,
-                    ),
-                  );
-                }),
+                  state.bsetSellerProducts.fold((error) {
+                    return SliverToBoxAdapter(
+                      child: Text(error),
+                    );
+                  }, (response) {
+                    return SliverToBoxAdapter(
+                      child: ProductBestSellerList(
+                        productItems: response,
+                        themeData: themeData,
+                      ),
+                    );
+                  }),
+                },
               },
             ],
           );

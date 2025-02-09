@@ -7,6 +7,7 @@ import 'package:dartz/dartz.dart';
 abstract class IProductRepositroy {
   Future<Either<String, List<ProductModel>>> getHotesstProduct();
   Future<Either<String, List<ProductModel>>> getBasetSeller();
+  Future<Either<String, List<ProductModel>>> getSingleProduct(String id);
 }
 
 class ProductRepositroy extends IProductRepositroy {
@@ -25,6 +26,16 @@ class ProductRepositroy extends IProductRepositroy {
   Future<Either<String, List<ProductModel>>> getBasetSeller() async {
     try {
       var response = await dataSource.getBestSellerProduct();
+      return Right(response);
+    } on ApiException catch (ex) {
+      return left(ex.message ?? 'خطایی رخ داده هست');
+    }
+  }
+
+  @override
+  Future<Either<String, List<ProductModel>>> getSingleProduct(String id) async {
+    try {
+      var response = await dataSource.getSingleProduct(id);
       return Right(response);
     } on ApiException catch (ex) {
       return left(ex.message ?? 'خطایی رخ داده هست');

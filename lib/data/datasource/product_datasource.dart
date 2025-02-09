@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 abstract class IProductDataSource {
   Future<List<ProductModel>> getHotesstProduct();
   Future<List<ProductModel>> getBestSellerProduct();
+  Future<List<ProductModel>> getSingleProduct(String id);
 }
 
 class ProductRemoteDataSource implements IProductDataSource {
@@ -32,6 +33,23 @@ class ProductRemoteDataSource implements IProductDataSource {
     try {
       Response response = await httpClinet.get('products/records',
           queryParameters: {"filter": "popularity=\"Best Seller\""});
+      return response.data['items']
+          .map<ProductModel>(
+            (json) => ProductModel.fromJson(json),
+          )
+          .toList();
+    } on DioException catch (ex) {
+      throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
+    } catch (ex) {
+      throw ApiException(0, 'خطا نا مشخص');
+    }
+  }
+
+  @override
+  Future<List<ProductModel>> getSingleProduct(String id) async {
+    try {
+      Response response = await httpClinet
+          .get('products/records', queryParameters: {"filter": "id=\"$id\""});
       return response.data['items']
           .map<ProductModel>(
             (json) => ProductModel.fromJson(json),

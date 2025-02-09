@@ -1,7 +1,7 @@
 import 'package:apple_shop/bloc/auth/auth_bloc.dart';
 import 'package:apple_shop/bloc/category/category_bloc.dart';
 import 'package:apple_shop/bloc/home/home_bloc.dart';
-import 'package:apple_shop/screen/home_screen.dart';
+import 'package:apple_shop/screen/test_screen.dart';
 import 'package:apple_shop/theme.dart';
 import 'package:apple_shop/utils/di.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'AppleShop',
       theme: lightThemeData(),
-      home: const HomeScreen(),
+      home: const TestScreen(),
     );
   }
 }

@@ -8,6 +8,7 @@ abstract class IProductRepositroy {
   Future<Either<String, List<ProductModel>>> getHotesstProduct();
   Future<Either<String, List<ProductModel>>> getBasetSeller();
   Future<Either<String, List<ProductModel>>> getSingleProduct(String id);
+  Future<Either<String, List<ProductModel>>> getProductList(String id);
 }
 
 class ProductRepositroy extends IProductRepositroy {
@@ -36,6 +37,16 @@ class ProductRepositroy extends IProductRepositroy {
   Future<Either<String, List<ProductModel>>> getSingleProduct(String id) async {
     try {
       var response = await dataSource.getSingleProduct(id);
+      return Right(response);
+    } on ApiException catch (ex) {
+      return left(ex.message ?? 'خطایی رخ داده هست');
+    }
+  }
+
+  @override
+  Future<Either<String, List<ProductModel>>> getProductList(String id) async {
+    try {
+      var response = await dataSource.getProductList(id);
       return Right(response);
     } on ApiException catch (ex) {
       return left(ex.message ?? 'خطایی رخ داده هست');

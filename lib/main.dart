@@ -1,7 +1,9 @@
 import 'package:apple_shop/bloc/auth/auth_bloc.dart';
+import 'package:apple_shop/bloc/bloc/prodoct_list_bloc.dart';
 import 'package:apple_shop/bloc/category/category_bloc.dart';
 import 'package:apple_shop/bloc/home/home_bloc.dart';
-import 'package:apple_shop/screen/test_screen.dart';
+import 'package:apple_shop/bloc/productSingle/productsingle_bloc.dart';
+import 'package:apple_shop/screen/home_screen.dart';
 import 'package:apple_shop/theme.dart';
 import 'package:apple_shop/utils/di.dart';
 import 'package:flutter/material.dart';
@@ -14,20 +16,28 @@ void main() async {
   // init get it
   await getItInit();
 
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider(
-        create: (context) => AuthBloc(),
-      ),
-      BlocProvider(
-        create: (context) => CategoryBloc(),
-      ),
-      BlocProvider(
-        create: (context) => HomeBloc(),
-      ),
-    ],
-    child: MyApp(),
-  ));
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthBloc(),
+        ),
+        BlocProvider(
+          create: (context) => CategoryBloc(),
+        ),
+        BlocProvider(
+          create: (context) => HomeBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ProductsingleBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ProdoctListBloc(),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -48,7 +58,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'AppleShop',
       theme: lightThemeData(),
-      home: const TestScreen(),
+      home: HomeScreen(),
     );
   }
 }

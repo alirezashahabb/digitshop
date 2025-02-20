@@ -30,15 +30,19 @@ class TestScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                var either = await ProductRepositroy()
-                    .getSingleProduct('p4ah0vfcb3joeju');
-                either.fold((l) {
-                  print(l);
-                }, (r) {
-                  for (var element in r) {
-                    print(element.name);
-                  }
-                });
+                var either =
+                    await ProductRepositroy().getProductList('0fml1qqa0q17pk2');
+
+                either.fold(
+                  (l) {
+                    print(l);
+                  },
+                  (r) {
+                    for (var items in r) {
+                      print(items.name);
+                    }
+                  },
+                );
               },
               child: Text('Test'),
             ),

@@ -49,26 +49,30 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
               } else ...{
                 if (state is ProductSingleSuceesStateate) ...{
                   // ==========================AppBar title
-                  state.category.fold((error) {
-                    return SliverToBoxAdapter(
-                      child: Text('دسته بندی'),
-                    );
-                  }, (response) {
-                    return SliverAppBar(
-                      actions: [
-                        Assets.img.iconAppleBlue.image(),
-                      ],
-                      centerTitle: true,
-                      title: Text(
-                        response.title!,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: AppColor.mainColor,
-                              fontSize: 17,
-                            ),
-                      ),
-                      leading: Assets.img.iconBack.image(),
-                    );
-                  }),
+                  state.category.fold(
+                    (error) {
+                      return SliverToBoxAdapter(
+                        child: Text('دسته بندی'),
+                      );
+                    },
+                    (response) {
+                      return SliverAppBar(
+                        actions: [
+                          Assets.img.iconAppleBlue.image(),
+                        ],
+                        centerTitle: true,
+                        title: Text(
+                          response.title!,
+                          style:
+                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    color: AppColor.mainColor,
+                                    fontSize: 17,
+                                  ),
+                        ),
+                        leading: Assets.img.iconBack.image(),
+                      );
+                    },
+                  ),
                   //=====================================>>>>ProductTitle
                   SliverToBoxAdapter(
                     child: Padding(

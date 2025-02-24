@@ -1,15 +1,31 @@
+import 'package:apple_shop/bloc/cart/cart_bloc.dart';
 import 'package:apple_shop/gen/assets.gen.dart';
+import 'package:apple_shop/model/cart_item_model.dart';
 import 'package:apple_shop/theme.dart';
 import 'package:apple_shop/utils/colo_extion.dart';
+import 'package:apple_shop/utils/image_loading_service.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  @override
+  void initState() {
+    BlocProvider.of<CartBloc>(context).add(CartInitEvent());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+
     return Scaffold(
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,
@@ -25,36 +41,68 @@ class CartScreen extends StatelessWidget {
               )),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            actions: [
-              Assets.img.iconAppleBlue.image(),
-            ],
-            centerTitle: true,
-            title: Text(
-              'سبد خرید',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: AppColor.mainColor,
-                    fontSize: 17,
+      body: BlocBuilder<CartBloc, CartState>(
+        builder: (context, state) {
+          return CustomScrollView(
+            slivers: [
+              if (state is CartLoadingState) ...{
+                SliverToBoxAdapter(
+                  child: Center(
+                    child: CircularProgressIndicator(),
                   ),
-            ),
-            leading: Assets.img.iconBack.image(),
-          ),
-          SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-            return CartItem(themeData: themeData);
-          }, childCount: 10))
-        ],
+                ),
+              } else ...{
+                if (state is CartSucessState) ...{
+                  SliverAppBar(
+                    actions: [
+                      Assets.img.iconAppleBlue.image(),
+                    ],
+                    centerTitle: true,
+                    title: Text(
+                      'سبد خرید',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: AppColor.mainColor,
+                            fontSize: 17,
+                          ),
+                    ),
+                    leading: Assets.img.iconBack.image(),
+                  ),
+                  state.cartItem.fold(
+                    (erro) {
+                      return SliverToBoxAdapter(
+                        child: Text(erro),
+                      );
+                    },
+                    (cartItem) {
+                      return SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            return CartItem(
+                              themeData: themeData,
+                              cartItem: cartItem[index],
+                            );
+                          },
+                          childCount: cartItem.length,
+                        ),
+                      );
+                    },
+                  ),
+                }
+              },
+            ],
+          );
+        },
       ),
     );
   }
 }
 
 class CartItem extends StatelessWidget {
+  final CartItemModel cartItem;
   const CartItem({
     super.key,
     required this.themeData,
+    required this.cartItem,
   });
 
   final ThemeData themeData;
@@ -77,13 +125,20 @@ class CartItem extends StatelessWidget {
               child: Row(
                 spacing: 10,
                 children: [
-                  Assets.img.iphone.image(),
+                  SizedBox(
+                    width: 104,
+                    height: 104,
+                    child: ImageLoadingService(
+                      mainImage: cartItem.thumbnail!,
+                      radius: 12,
+                    ),
+                  ),
                   Column(
                     spacing: 6,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'آیفون13 پرو مکس',
+                        cartItem.name!,
                         style: themeData.textTheme.bodyMedium!.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -168,7 +223,7 @@ class CartItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
               vertical: 10,
             ),
-            child: Text('900000 تومان'),
+            child: Text('$cartItem.realPeice تومان'),
           )
         ],
       ),

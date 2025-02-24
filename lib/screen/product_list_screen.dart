@@ -1,4 +1,4 @@
-import 'package:apple_shop/bloc/bloc/prodoct_list_bloc.dart';
+import 'package:apple_shop/bloc/prodoct/prodoct_list_bloc.dart';
 import 'package:apple_shop/gen/assets.gen.dart';
 import 'package:apple_shop/model/category_model.dart';
 import 'package:apple_shop/theme.dart';

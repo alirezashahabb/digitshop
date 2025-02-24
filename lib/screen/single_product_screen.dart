@@ -222,7 +222,9 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         //============================================>>>>>>.add Cart
-                        AddCart(),
+                        AddCart(
+                          product: widget.singleProduct,
+                        ),
                         //=================================================>>>>>totla Price
                         TotlaPrice(widget: widget)
                       ],
@@ -694,8 +696,10 @@ class TotlaPrice extends StatelessWidget {
 
 //============================================>>>>>>.add Cart
 class AddCart extends StatelessWidget {
+  final ProductModel product;
   const AddCart({
     super.key,
+    required this.product,
   });
 
   @override
@@ -717,23 +721,31 @@ class AddCart extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: Container(
-              alignment: Alignment.center,
-              height: 53,
-              width: 160,
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(
-                  15,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () async {
+                context
+                    .read<ProductsingleBloc>()
+                    .add(ProdoctAddCartEvent(product: product));
+              },
+              child: Container(
+                alignment: Alignment.center,
+                height: 53,
+                width: 160,
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(
+                    15,
+                  ),
                 ),
-              ),
-              child: Text(
-                'افزودن به سبد خرید',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: 14,
-                      color: AppColor.whiteColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                child: Text(
+                  'افزودن به سبد خرید',
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontSize: 14,
+                        color: AppColor.whiteColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
               ),
             ),
           ),

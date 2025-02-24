@@ -1,7 +1,8 @@
 import 'package:apple_shop/bloc/auth/auth_bloc.dart';
-import 'package:apple_shop/bloc/bloc/prodoct_list_bloc.dart';
+import 'package:apple_shop/bloc/cart/cart_bloc.dart';
 import 'package:apple_shop/bloc/category/category_bloc.dart';
 import 'package:apple_shop/bloc/home/home_bloc.dart';
+import 'package:apple_shop/bloc/prodoct/prodoct_list_bloc.dart';
 import 'package:apple_shop/bloc/productSingle/productsingle_bloc.dart';
 import 'package:apple_shop/model/cart_item_model.dart';
 import 'package:apple_shop/screen/cart%20_screen.dart';
@@ -41,6 +42,9 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => ProdoctListBloc(),
+        ),
+        BlocProvider(
+          create: (context) => CartBloc(),
         ),
       ],
       child: MyApp(),

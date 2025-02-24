@@ -1,10 +1,12 @@
 import 'package:apple_shop/data/datasource/auth_datasource.dart';
 import 'package:apple_shop/data/datasource/banner_dataSorce.dart';
+import 'package:apple_shop/data/datasource/cart_item_dataSource.dart';
 import 'package:apple_shop/data/datasource/category_datasource.dart';
 import 'package:apple_shop/data/datasource/product_datasource.dart';
 import 'package:apple_shop/data/datasource/single_product_dataSource.dart';
 import 'package:apple_shop/data/repository/auth_repositroy.dart';
 import 'package:apple_shop/data/repository/banner_repositroy.dart';
+import 'package:apple_shop/data/repository/cart_item_repository.dart';
 import 'package:apple_shop/data/repository/category_repositroy.dart';
 import 'package:apple_shop/data/repository/prodoct_repositroy.dart';
 import 'package:apple_shop/data/repository/singleProduct_repositroy.dart';
@@ -39,6 +41,9 @@ Future<void> getItInit() async {
   locator.registerFactory<ISingleProductDataSource>(
     () => SingleProductRemoteDataSourc(),
   );
+  locator.registerFactory<ICartItemeDataSorce>(
+    () => CartItemLocalDataSource(),
+  );
 
   //Repositroy
   locator.registerFactory<IAuthRepositroy>(
@@ -55,5 +60,8 @@ Future<void> getItInit() async {
   );
   locator.registerFactory<ISingleProductRepositroy>(
     () => SingleProductRepositroy(),
+  );
+  locator.registerFactory<ICartItemRepositroy>(
+    () => CartItemRepository(),
   );
 }

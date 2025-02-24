@@ -12,3 +12,10 @@ class ProductSingleInitEvent extends ProductsingleEvent {
     required this.categryId,
   });
 }
+
+// add prodoct to basket
+class ProdoctAddCartEvent extends ProductsingleEvent {
+  final ProductModel product;
+
+  ProdoctAddCartEvent({required this.product});
+}

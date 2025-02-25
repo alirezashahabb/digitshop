@@ -1,3 +1,4 @@
+import 'package:apple_shop/bloc/cart/cart_bloc.dart';
 import 'package:apple_shop/data/datasource/auth_datasource.dart';
 import 'package:apple_shop/data/datasource/banner_dataSorce.dart';
 import 'package:apple_shop/data/datasource/cart_item_dataSource.dart';
@@ -63,5 +64,10 @@ Future<void> getItInit() async {
   );
   locator.registerFactory<ICartItemRepositroy>(
     () => CartItemRepository(),
+  );
+
+  // bloc
+  locator.registerSingleton<CartBloc>(
+    CartBloc(),
   );
 }

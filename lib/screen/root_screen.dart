@@ -1,12 +1,15 @@
 import 'dart:ui';
 
+import 'package:apple_shop/bloc/cart/cart_bloc.dart';
 import 'package:apple_shop/gen/assets.gen.dart';
 import 'package:apple_shop/screen/cart%20_screen.dart';
 import 'package:apple_shop/screen/category_screen.dart';
 import 'package:apple_shop/screen/home_screen.dart';
 import 'package:apple_shop/screen/profile_scren.dart';
 import 'package:apple_shop/theme.dart';
+import 'package:apple_shop/utils/di.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -134,7 +137,14 @@ class _RootScreenState extends State<RootScreen> {
           Navigator(
             key: basketKey,
             onGenerateRoute: (settings) => MaterialPageRoute(
-              builder: (context) => CartScreen(),
+              builder: (context) => BlocProvider(
+                create: (context) {
+                  var bloc = locator.get<CartBloc>();
+                  bloc.add(CartInitEvent());
+                  return bloc;
+                },
+                child: CartScreen(),
+              ),
               settings: settings,
             ),
           ),

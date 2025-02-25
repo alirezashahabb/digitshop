@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:apple_shop/bloc/cart/cart_bloc.dart';
 import 'package:apple_shop/bloc/productSingle/productsingle_bloc.dart';
 import 'package:apple_shop/gen/assets.gen.dart';
 import 'package:apple_shop/model/gallery_model.dart';
@@ -25,14 +26,31 @@ class SingleProductScreen extends StatefulWidget {
 
 class _SingleProductScreenState extends State<SingleProductScreen> {
   @override
-  void initState() {
-    BlocProvider.of<ProductsingleBloc>(context).add(
-      ProductSingleInitEvent(
-          id: widget.singleProduct.id!,
-          categryId: widget.singleProduct.category!),
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) {
+        var bloc = ProductsingleBloc();
+        bloc.add(
+          ProductSingleInitEvent(
+              id: widget.singleProduct.id!,
+              categryId: widget.singleProduct.category!),
+        );
+        return bloc;
+      },
+      child: DetailContentWidget(
+        parentWidget: widget,
+      ),
     );
-    super.initState();
   }
+}
+
+class DetailContentWidget extends StatelessWidget {
+  const DetailContentWidget({
+    super.key,
+    required this.parentWidget,
+  });
+
+  final SingleProductScreen parentWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +96,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 32, bottom: 20),
                       child: Text(
-                        widget.singleProduct.name!,
+                        parentWidget.singleProduct.name!,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               fontSize: 18,
                             ),
@@ -96,7 +114,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                     (galley) {
                       return GallerySection(
                         gallery: galley,
-                        defaultImage: widget.singleProduct.thumbnail!,
+                        defaultImage: parentWidget.singleProduct.thumbnail!,
                       );
                     },
                   ),
@@ -123,7 +141,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                   ),
 
                   ///===========================================>>>>Descreption
-                  DescreptionSection(product: widget),
+                  DescreptionSection(product: parentWidget),
                 },
 
                 //=====================================>>>> Comment
@@ -223,10 +241,10 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                       children: [
                         //============================================>>>>>>.add Cart
                         AddCart(
-                          product: widget.singleProduct,
+                          product: parentWidget.singleProduct,
                         ),
                         //=================================================>>>>>totla Price
-                        TotlaPrice(widget: widget)
+                        TotlaPrice(widget: parentWidget)
                       ],
                     ),
                   ),
@@ -727,6 +745,8 @@ class AddCart extends StatelessWidget {
                 context
                     .read<ProductsingleBloc>()
                     .add(ProdoctAddCartEvent(product: product));
+
+                context.read<CartBloc>().add(CartInitEvent());
               },
               child: Container(
                 alignment: Alignment.center,

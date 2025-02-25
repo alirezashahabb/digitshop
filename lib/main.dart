@@ -16,14 +16,16 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async {
   //SharePrefance
   WidgetsFlutterBinding.ensureInitialized();
-  // init get it
-  await getItInit();
+
   // init Hive
   await Hive.initFlutter();
   Hive.registerAdapter(
     CartItemModelAdapter(),
   );
   await Hive.openBox<CartItemModel>('cartItem');
+
+  // init get it
+  await getItInit();
 
   runApp(
     MultiBlocProvider(

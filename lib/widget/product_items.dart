@@ -1,10 +1,13 @@
+import 'package:apple_shop/bloc/cart/cart_bloc.dart';
 import 'package:apple_shop/gen/assets.gen.dart';
 import 'package:apple_shop/model/product_model.dart';
 import 'package:apple_shop/screen/single_product_screen.dart';
 import 'package:apple_shop/theme.dart';
+import 'package:apple_shop/utils/di.dart';
 import 'package:apple_shop/utils/image_loading_service.dart';
 import 'package:apple_shop/utils/navigator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 
 class ProductItems extends StatelessWidget {
@@ -23,8 +26,11 @@ class ProductItems extends StatelessWidget {
       onTap: () {
         goScreen(
           context: context,
-          screen: SingleProductScreen(
-            singleProduct: product,
+          screen: BlocProvider<CartBloc>.value(
+            value: locator.get<CartBloc>(),
+            child: SingleProductScreen(
+              singleProduct: product,
+            ),
           ),
         );
       },

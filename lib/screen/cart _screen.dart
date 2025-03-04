@@ -2,11 +2,15 @@ import 'package:apple_shop/bloc/cart/cart_bloc.dart';
 import 'package:apple_shop/gen/assets.gen.dart';
 import 'package:apple_shop/model/cart_item_model.dart';
 import 'package:apple_shop/theme.dart';
-import 'package:apple_shop/utils/colo_extion.dart';
 import 'package:apple_shop/utils/image_loading_service.dart';
+import 'package:apple_shop/utils/string_extions.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:persian_number_utility/persian_number_utility.dart';
+import 'package:uni_links/uni_links.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:zarinpal/zarinpal.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -16,9 +20,36 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final PaymentRequest _paymentRequest = PaymentRequest();
+
   @override
   void initState() {
-    BlocProvider.of<CartBloc>(context).add(CartInitEvent());
+    _paymentRequest.setIsSandBox(true);
+    _paymentRequest.setAmount(2000);
+    _paymentRequest.setDescription('this is test');
+    _paymentRequest.setMerchantID('d645fba8-1b29-11ea-be59-000c295eb8fc');
+    _paymentRequest.setCallbackURL('expertflutter://shop');
+
+    linkStream.listen(
+      (deeplink) {
+        if (deeplink!.toLowerCase().contains('authority')) {
+          String? authority = deeplink.extractValueFromQuery('Authority');
+          String? status = deeplink.extractValueFromQuery('Status');
+          ZarinPal().verificationPayment(
+            status!,
+            authority!,
+            _paymentRequest,
+            (isPaymentSuccess, refID, paymentRequest, data) {
+              if (isPaymentSuccess) {
+                print(data);
+              } else {
+                print('Error');
+              }
+            },
+          );
+        }
+      },
+    );
     super.initState();
   }
 
@@ -27,68 +58,95 @@ class _CartScreenState extends State<CartScreen> {
     ThemeData themeData = Theme.of(context);
 
     return Scaffold(
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FloatingActionButton.extended(
-          backgroundColor: AppColor.greenColor,
-          onPressed: () {},
-          label: Text('ادامه به سبد خرید',
-              style: themeData.textTheme.bodyMedium!.copyWith(
-                color: AppColor.whiteColor,
-                fontWeight: FontWeight.bold,
-              )),
-        ),
-      ),
       body: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
-          return CustomScrollView(
-            slivers: [
-              if (state is CartLoadingState) ...{
-                SliverToBoxAdapter(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              } else ...{
-                if (state is CartSucessState) ...{
-                  SliverAppBar(
-                    actions: [
-                      Assets.img.iconAppleBlue.image(),
-                    ],
-                    centerTitle: true,
-                    title: Text(
-                      'سبد خرید',
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: AppColor.mainColor,
-                            fontSize: 17,
-                          ),
+          return Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              CustomScrollView(
+                slivers: [
+                  if (state is CartLoadingState) ...{
+                    SliverToBoxAdapter(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
-                    leading: Assets.img.iconBack.image(),
-                  ),
-                  state.cartItem.fold(
-                    (erro) {
-                      return SliverToBoxAdapter(
-                        child: Text(erro),
-                      );
-                    },
-                    (cartItem) {
-                      return SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            return CartItem(
-                              themeData: themeData,
-                              cartItem: cartItem[index],
-                            );
-                          },
-                          childCount: cartItem.length,
+                  } else ...{
+                    if (state is CartSucessState) ...{
+                      SliverAppBar(
+                        actions: [
+                          Assets.img.iconAppleBlue.image(),
+                        ],
+                        centerTitle: true,
+                        title: Text(
+                          'سبد خرید',
+                          style:
+                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    color: AppColor.mainColor,
+                                    fontSize: 17,
+                                  ),
                         ),
-                      );
-                    },
-                  ),
-                }
-              },
+                        leading: Assets.img.iconBack.image(),
+                      ),
+                      state.cartItem.fold(
+                        (erro) {
+                          return SliverToBoxAdapter(
+                            child: Text(erro),
+                          );
+                        },
+                        (cartItem) {
+                          return SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                return CartItem(
+                                  themeData: themeData,
+                                  cartItem: cartItem[index],
+                                );
+                              },
+                              childCount: cartItem.length,
+                            ),
+                          );
+                        },
+                      ),
+                    }
+                  },
+                ],
+              ),
+              if (state is CartSucessState) ...{
+                GestureDetector(
+                  onTap: () {
+                    ZarinPal().startPayment(
+                      _paymentRequest,
+                      (status, paymentGatewayUri, data) {
+                        try {
+                          if (status == 100) {
+                            launchUrl(
+                              Uri.parse(paymentGatewayUri!),
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                    );
+                  },
+                  child: Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                      height: 50,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColor.greenColor,
+                        borderRadius: BorderRadius.circular(
+                          20,
+                        ),
+                      ),
+                      child: state.finalPrice == 0
+                          ? Text('سبد خرید شما خالی هست')
+                          : Text('${state.finalPrice} '.seRagham())),
+                )
+              }
             ],
           );
         },
@@ -110,7 +168,7 @@ class CartItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(44, 10, 44, 20),
+      margin: EdgeInsets.fromLTRB(44, 20, 44, 20),
       height: 249,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
@@ -223,7 +281,14 @@ class CartItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
               vertical: 10,
             ),
-            child: Text('$cartItem.realPeice تومان'),
+            child: Row(
+              spacing: 4,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('${cartItem.realPeice}'.seRagham()),
+                Text('تومان')
+              ],
+            ),
           )
         ],
       ),

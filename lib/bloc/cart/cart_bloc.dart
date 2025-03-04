@@ -17,7 +17,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           (CartLoadingState()),
         );
         var respose = await cartItem.getCartItem();
-        emit(CartSucessState(cartItem: respose));
+        var finalPrice = await cartItem.getBasketFinalPrice();
+        emit(
+          CartSucessState(
+            cartItem: respose,
+            finalPrice: finalPrice,
+          ),
+        );
       }
     });
   }

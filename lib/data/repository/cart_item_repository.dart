@@ -7,6 +7,7 @@ import 'package:dartz/dartz.dart';
 abstract class ICartItemRepositroy {
   Future<Either<String, String>> addCartItem(CartItemModel cartItem);
   Future<Either<String, List<CartItemModel>>> getCartItem();
+  Future<int> getBasketFinalPrice();
 }
 
 class CartItemRepository implements ICartItemRepositroy {
@@ -29,5 +30,10 @@ class CartItemRepository implements ICartItemRepositroy {
     } on ApiException catch (ex) {
       return left(ex.message ?? 'خطایی رخ داده هست');
     }
+  }
+
+  @override
+  Future<int> getBasketFinalPrice() async {
+    return cartItemeDataSorce.getBasketFinalPrice();
   }
 }

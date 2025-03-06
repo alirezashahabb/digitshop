@@ -17,6 +17,7 @@ part 'productsingle_state.dart';
 class ProductsingleBloc extends Bloc<ProductsingleEvent, ProductsingleState> {
   final ISingleProductRepositroy productRepositroy = locator.get();
   final ICartItemRepositroy cartItemRepositroy = locator.get();
+
   ProductsingleBloc() : super(ProductsingleInitialState()) {
     on<ProductsingleEvent>(
       (event, emit) async {

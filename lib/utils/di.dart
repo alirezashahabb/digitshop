@@ -11,6 +11,8 @@ import 'package:apple_shop/data/repository/cart_item_repository.dart';
 import 'package:apple_shop/data/repository/category_repositroy.dart';
 import 'package:apple_shop/data/repository/prodoct_repositroy.dart';
 import 'package:apple_shop/data/repository/singleProduct_repositroy.dart';
+import 'package:apple_shop/utils/payment_handler.dart';
+import 'package:apple_shop/utils/url_handler.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +20,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 var locator = GetIt.instance;
 
 Future<void> getItInit() async {
+  //utils
+  locator.registerSingleton<UrlHandler>(UrlLauncher());
+  locator.registerSingleton<PaymentHandler>(ZarinpalPaymentHandler(
+    locator.get(),
+  ));
+
   //Conponents
   locator.registerSingleton<Dio>(Dio(
     BaseOptions(baseUrl: 'https://startflutter.ir/api/collections/'),
@@ -68,6 +76,6 @@ Future<void> getItInit() async {
 
   // bloc
   locator.registerSingleton<CartBloc>(
-    CartBloc(),
+    CartBloc(locator.get(), locator.get()),
   );
 }

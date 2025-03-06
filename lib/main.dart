@@ -16,6 +16,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async {
   //SharePrefance
   WidgetsFlutterBinding.ensureInitialized();
+  // init get it
 
   // init Hive
   await Hive.initFlutter();
@@ -24,7 +25,6 @@ void main() async {
   );
   await Hive.openBox<CartItemModel>('cartItem');
 
-  // init get it
   await getItInit();
 
   runApp(
@@ -46,7 +46,7 @@ void main() async {
           create: (context) => ProdoctListBloc(),
         ),
         BlocProvider(
-          create: (context) => CartBloc(),
+          create: (context) => CartBloc(locator.get(), locator.get()),
         ),
       ],
       child: MyApp(),

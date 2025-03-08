@@ -91,6 +91,9 @@ class $AssetsImgGen {
   /// File path: assets/img/iphone.png
   AssetGenImage get iphone => const AssetGenImage('assets/img/iphone.png');
 
+  /// File path: assets/img/loading.json
+  String get loading => 'assets/img/loading.json';
+
   /// File path: assets/img/login_photo.jpg
   AssetGenImage get loginPhoto =>
       const AssetGenImage('assets/img/login_photo.jpg');
@@ -99,7 +102,7 @@ class $AssetsImgGen {
   AssetGenImage get register => const AssetGenImage('assets/img/register.jpg');
 
   /// List of all assets
-  List<AssetGenImage> get values => [
+  List<dynamic> get values => [
         activeFavProduct,
         avatar,
         iconAppleBlue,
@@ -121,6 +124,7 @@ class $AssetsImgGen {
         iconStar,
         iconTrash,
         iphone,
+        loading,
         loginPhoto,
         register
       ];

@@ -9,6 +9,7 @@ import 'package:apple_shop/widget/category_section.dart';
 import 'package:apple_shop/widget/product_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,145 +36,154 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
-          return getHomeContent(state, themeData, pageController);
+          return getHomeContent(state, themeData, pageController, context);
         },
       ),
     );
   }
 }
 
-Widget getHomeContent(HomeState state, themeData, pageController) {
+Widget getHomeContent(
+    HomeState state, themeData, pageController, BuildContext contex) {
   if (state is HomeLoadingState) {
     return LoadingService();
   } else if (state is HomeSuccesState) {
-    return CustomScrollView(
-      slivers: [
-        GetSearchBox(themeData: themeData),
-        ...{
-          state.banner.fold((error) {
-            return SliverToBoxAdapter(
-              child: Text(error),
-            );
-          }, (response) {
-            return GetBanner(
-              pageController: pageController,
-              banner: response,
-            );
-          }),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: Text(
-                'دسته بندی',
-                textAlign: TextAlign.start,
-                style: themeData.textTheme.bodyMedium!.copyWith(
-                  color: AppColor.secondaryColor,
-                  fontWeight: FontWeight.w600,
+    return LiquidPullToRefresh(
+      color: AppColor.mainColor,
+      height: 200,
+      onRefresh: () async {
+        contex.read<HomeBloc>().add(HomeInitEvent());
+      },
+      child: CustomScrollView(
+        slivers: [
+          GetSearchBox(themeData: themeData),
+          ...{
+            state.banner.fold((error) {
+              return SliverToBoxAdapter(
+                child: Text(error),
+              );
+            }, (response) {
+              return GetBanner(
+                pageController: pageController,
+                banner: response,
+              );
+            }),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: Text(
+                  'دسته بندی',
+                  textAlign: TextAlign.start,
+                  style: themeData.textTheme.bodyMedium!.copyWith(
+                    color: AppColor.secondaryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
-          ),
-          state.category.fold((error) {
-            return SliverToBoxAdapter(
-              child: Text(error),
-            );
-          }, (response) {
-            return GetCategory(categories: response);
-          }),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'پر بازدید ترین ها',
-                    textAlign: TextAlign.start,
-                    style: themeData.textTheme.bodyMedium!.copyWith(
-                      color: AppColor.secondaryColor,
-                      fontWeight: FontWeight.w600,
+            state.category.fold((error) {
+              return SliverToBoxAdapter(
+                child: Text(error),
+              );
+            }, (response) {
+              return GetCategory(categories: response);
+            }),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'پر بازدید ترین ها',
+                      textAlign: TextAlign.start,
+                      style: themeData.textTheme.bodyMedium!.copyWith(
+                        color: AppColor.secondaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'مشاهده همه',
-                          style: themeData.textTheme.bodyMedium!.copyWith(
-                            color: AppColor.mainColor,
+                    Row(
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'مشاهده همه',
+                            style: themeData.textTheme.bodyMedium!.copyWith(
+                              color: AppColor.mainColor,
+                            ),
                           ),
                         ),
-                      ),
-                      Image.asset(
-                        'assets/img/icon_left_categroy.png',
-                      ),
-                    ],
-                  )
-                ],
+                        Image.asset(
+                          'assets/img/icon_left_categroy.png',
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          state.hottestProduct.fold((error) {
-            return SliverToBoxAdapter(
-              child: Text(error),
-            );
-          }, (response) {
-            return SliverToBoxAdapter(
-              child: ProductBestSellerList(
-                productItems: response,
-                themeData: themeData,
-              ),
-            );
-          }),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'پر فروش ترین ها',
-                    textAlign: TextAlign.start,
-                    style: themeData.textTheme.bodyMedium!.copyWith(
-                      color: AppColor.secondaryColor,
-                      fontWeight: FontWeight.w600,
+            state.hottestProduct.fold((error) {
+              return SliverToBoxAdapter(
+                child: Text(error),
+              );
+            }, (response) {
+              return SliverToBoxAdapter(
+                child: ProductBestSellerList(
+                  productItems: response,
+                  themeData: themeData,
+                ),
+              );
+            }),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'پر فروش ترین ها',
+                      textAlign: TextAlign.start,
+                      style: themeData.textTheme.bodyMedium!.copyWith(
+                        color: AppColor.secondaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'مشاهده همه',
-                          style: themeData.textTheme.bodyMedium!.copyWith(
-                            color: AppColor.mainColor,
+                    Row(
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'مشاهده همه',
+                            style: themeData.textTheme.bodyMedium!.copyWith(
+                              color: AppColor.mainColor,
+                            ),
                           ),
                         ),
-                      ),
-                      Image.asset(
-                        'assets/img/icon_left_categroy.png',
-                      ),
-                    ],
-                  )
-                ],
+                        Image.asset(
+                          'assets/img/icon_left_categroy.png',
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          state.bsetSellerProducts.fold((error) {
-            return SliverToBoxAdapter(
-              child: Text(error),
-            );
-          }, (response) {
-            return SliverToBoxAdapter(
-              child: ProductBestSellerList(
-                productItems: response,
-                themeData: themeData,
-              ),
-            );
-          }),
-        },
-      ],
+            state.bsetSellerProducts.fold((error) {
+              return SliverToBoxAdapter(
+                child: Text(error),
+              );
+            }, (response) {
+              return SliverToBoxAdapter(
+                child: ProductBestSellerList(
+                  productItems: response,
+                  themeData: themeData,
+                ),
+              );
+            }),
+          },
+        ],
+      ),
     );
   } else {
     return Center(child: Text('خطایی رخ داده هست'));

@@ -30,7 +30,8 @@ class TestScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                var either = await CommentRepositroy().getComment();
+                var either =
+                    await CommentRepositroy().getComment('at0y1gm0t65j62j');
 
                 either.fold(
                   (l) {

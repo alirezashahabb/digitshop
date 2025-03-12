@@ -4,15 +4,17 @@ import 'package:apple_shop/utils/di.dart';
 import 'package:dio/dio.dart';
 
 abstract class ICommentDataSource {
-  Future<List<CommentModel>> getComment();
+  Future<List<CommentModel>> getComment(String productId);
 }
 
 class CommentRemoteDataSource extends ICommentDataSource {
   final Dio httpClinet = locator.get();
   @override
-  Future<List<CommentModel>> getComment() async {
+  Future<List<CommentModel>> getComment(String productId) async {
     try {
-      Response response = await httpClinet.get('comment/records');
+      Response response = await httpClinet.get('comment/records',
+          queryParameters: {"filter": "product_id =\"$productId\""});
+
       return response.data['items']
           .map<CommentModel>(
             (json) => CommentModel.fromJson(json),

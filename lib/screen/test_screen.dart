@@ -1,5 +1,5 @@
 import 'package:apple_shop/data/repository/auth_repositroy.dart';
-import 'package:apple_shop/data/repository/prodoct_repositroy.dart';
+import 'package:apple_shop/data/repository/comment_reppositroy.dart';
 import 'package:apple_shop/utils/auth_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -30,8 +30,7 @@ class TestScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                var either =
-                    await ProductRepositroy().getProductList('0fml1qqa0q17pk2');
+                var either = await CommentRepositroy().getComment();
 
                 either.fold(
                   (l) {
@@ -39,7 +38,7 @@ class TestScreen extends StatelessWidget {
                   },
                   (r) {
                     for (var items in r) {
-                      print(items.name);
+                      print(items.text);
                     }
                   },
                 );

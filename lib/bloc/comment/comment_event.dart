@@ -8,3 +8,13 @@ class CommentInitEvent extends CommentEvent {
 
   CommentInitEvent({required this.productId});
 }
+
+class CommentPostEvent extends CommentEvent {
+  final String comment;
+  final String productId;
+
+  CommentPostEvent({
+    required this.comment,
+    required this.productId,
+  });
+}

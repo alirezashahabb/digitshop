@@ -17,6 +17,13 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
 
         emit(CommentSuccesState(comment: comment));
       }
+      if (event is CommentPostEvent) {
+        emit(CommentPostLoadingState(true));
+        var commentPost =
+            await repositroy.postComment(event.comment, event.productId);
+        emit(CommentPostLoadingState(false));
+        emit(CommentPostSucces(comment: commentPost));
+      }
     });
   }
 }

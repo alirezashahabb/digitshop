@@ -12,3 +12,17 @@ final class CommentSuccesState extends CommentState {
 
   CommentSuccesState({required this.comment});
 }
+
+// post Comment
+
+final class CommentPostLoadingState extends CommentState {
+  final bool isLoading;
+
+  CommentPostLoadingState(this.isLoading);
+}
+
+final class CommentPostSucces extends CommentState {
+  final Either<String, String> comment;
+
+  CommentPostSucces({required this.comment});
+}

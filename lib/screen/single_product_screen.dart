@@ -312,7 +312,7 @@ class CommentBottomSheet extends StatelessWidget {
               state.comment.fold(
                 (error) {
                   return SliverToBoxAdapter(
-                    child: Text('خطا'),
+                    child: Text('خطایی در نمایش نظرات به وجود آمده'),
                   );
                 },
                 (commentList) {

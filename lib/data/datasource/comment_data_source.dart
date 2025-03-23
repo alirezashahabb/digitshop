@@ -34,12 +34,11 @@ class CommentRemoteDataSource extends ICommentDataSource {
   @override
   Future<void> postComment(String productId, String comment) async {
     try {
-      final response = await httpClinet.post('collections/comment/records',
-          data: {
-            'text': comment,
-            'user_id': 'slta3cbjv43qdlm',
-            'product_id': productId
-          });
+      final response = await httpClinet.post('comment/records', data: {
+        'text': comment,
+        'user_id': 'slta3cbjv43qdlm',
+        'product_id': productId
+      });
     } on DioException catch (ex) {
       throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
     } catch (ex) {

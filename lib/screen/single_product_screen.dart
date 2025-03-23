@@ -14,6 +14,7 @@ import 'package:apple_shop/theme.dart';
 import 'package:apple_shop/utils/di.dart';
 import 'package:apple_shop/utils/image_loading_service.dart';
 import 'package:apple_shop/utils/loading_service.dart';
+import 'package:apple_shop/utils/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
@@ -168,6 +169,7 @@ class DetailContentWidget extends StatelessWidget {
                                 builder: (context, scrollController) {
                                   return CommentBottomSheet(
                                     controller: scrollController,
+                                    productId: parentWidget.singleProduct.id!,
                                   );
                                 },
                               ));
@@ -288,87 +290,203 @@ class DetailContentWidget extends StatelessWidget {
   }
 }
 
-class CommentBottomSheet extends StatelessWidget {
+class CommentBottomSheet extends StatefulWidget {
+  final String productId;
   final ScrollController controller;
   const CommentBottomSheet({
     super.key,
     required this.controller,
+    required this.productId,
   });
 
   @override
+  State<CommentBottomSheet> createState() => _CommentBottomSheetState();
+}
+
+final formKey = GlobalKey<FormState>();
+
+class _CommentBottomSheetState extends State<CommentBottomSheet> {
+  TextEditingController commentController = TextEditingController();
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CommentBloc, CommentState>(
-      builder: (context, state) {
-        return CustomScrollView(
-          controller: controller,
-          slivers: [
-            if (state is CommentLoadingState) ...{
-              SliverToBoxAdapter(
-                child: Center(
-                  child: LoadingAnimation(),
-                ),
-              )
-            } else if (state is CommentSuccesState) ...{
+    return Column(
+      children: [
+        BlocConsumer<CommentBloc, CommentState>(
+          listener: (context, state) {
+            if (state is CommentPostSucces) {
               state.comment.fold(
                 (error) {
-                  return SliverToBoxAdapter(
-                    child: Text('خطایی در نمایش نظرات به وجود آمده'),
+                  showCustomAlert(
+                    context,
+                    error,
+                    AlertType.error,
                   );
                 },
-                (commentList) {
-                  return commentList.isEmpty
-                      ? SliverToBoxAdapter(
-                          child: Center(
-                              child: Text(
-                            'برای این محصول هیچ نظری ثبت نشده هست!',
-                          )),
-                        )
-                      : SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                          childCount: commentList.length,
-                          (context, index) {
-                            var items = commentList[index];
-                            return Container(
-                              padding: EdgeInsets.all(12),
-                              margin: EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: AppColor.whiteColor),
-                              child: Row(
-                                spacing: 8,
-                                children: [
-                                  SizedBox(
-                                    height: 40,
-                                    width: 40,
-                                    child: items.avatar.isEmpty
-                                        ? Assets.img.avatar.image()
-                                        : ImageLoadingService(
-                                            mainImage: items.userThumbnailUrl),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(items.username.isEmpty
-                                          ? 'کاربر'
-                                          : items.username),
-                                      SizedBox(
-                                        height: 8,
-                                      ),
-                                      Text(items.text),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ));
+                (response) {
+                  showCustomAlert(
+                    context,
+                    response,
+                    AlertType.error,
+                  );
                 },
-              )
+              );
             }
-          ],
-        );
-      },
+          },
+          builder: (context, state) {
+            return Expanded(
+              child: CustomScrollView(
+                controller: widget.controller,
+                slivers: [
+                  if (state is CommentLoadingState) ...{
+                    SliverToBoxAdapter(
+                      child: Center(
+                        child: LoadingAnimation(),
+                      ),
+                    )
+                  } else if (state is CommentSuccesState) ...{
+                    state.comment.fold(
+                      (error) {
+                        return SliverToBoxAdapter(
+                          child: Text('خطایی در نمایش نظرات به وجود آمده'),
+                        );
+                      },
+                      (commentList) {
+                        return commentList.isEmpty
+                            ? SliverToBoxAdapter(
+                                child: Center(
+                                    child: Text(
+                                  'برای این محصول هیچ نظری ثبت نشده هست!',
+                                )),
+                              )
+                            : SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                  childCount: commentList.length,
+                                  (context, index) {
+                                    var items = commentList[index];
+                                    return Container(
+                                      padding: EdgeInsets.all(12),
+                                      margin: EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          color: AppColor.whiteColor),
+                                      child: Row(
+                                        spacing: 8,
+                                        children: [
+                                          SizedBox(
+                                            height: 40,
+                                            width: 40,
+                                            child: items.avatar.isEmpty
+                                                ? Assets.img.avatar.image()
+                                                : ImageLoadingService(
+                                                    mainImage:
+                                                        items.userThumbnailUrl),
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(items.username.isEmpty
+                                                  ? 'کاربر'
+                                                  : items.username),
+                                              SizedBox(
+                                                height: 8,
+                                              ),
+                                              Text(items.text),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                      },
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: SafeArea(
+                          child: Form(
+                            key: formKey,
+                            child: Column(
+                              spacing: 12,
+                              children: [
+                                TextFormField(
+                                  controller: commentController,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'لطفا نظر خود را وارد کنید';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    label: Text('ثبت نظر'),
+                                    labelStyle: TextStyle(
+                                        fontSize: 14, fontFamily: 'Shabnam'),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide: BorderSide(
+                                        color: AppColor.mainTextColor,
+                                        width: 0.5,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide: BorderSide(
+                                        color: AppColor.mainColor,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide: BorderSide(
+                                        color: AppColor.redColor,
+                                        width: 0.5,
+                                      ),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide: BorderSide(
+                                        color: AppColor.redColor,
+                                        width: 1,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      if (formKey.currentState!.validate()) {
+                                        context.read<CommentBloc>().add(
+                                              CommentPostEvent(
+                                                  comment:
+                                                      commentController.text,
+                                                  productId: widget.productId),
+                                            );
+                                      }
+                                    },
+                                    child: Text(
+                                      'افزودن نظر',
+                                      style: TextStyle(
+                                          fontSize: 14, fontFamily: 'Shabnam'),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  },
+                ],
+              ),
+            );
+          },
+        )
+      ],
     );
   }
 }

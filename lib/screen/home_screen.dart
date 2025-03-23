@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
 Widget getHomeContent(
     HomeState state, themeData, pageController, BuildContext contex) {
   if (state is HomeLoadingState) {
-    return LoadingService();
+    return LoadingAnimation();
   } else if (state is HomeSuccesState) {
     return LiquidPullToRefresh(
       color: AppColor.mainColor,

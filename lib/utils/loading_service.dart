@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 
-class LoadingService extends StatelessWidget {
-  const LoadingService({
+class LoadingAnimation extends StatelessWidget {
+  const LoadingAnimation({
     super.key,
   });
 

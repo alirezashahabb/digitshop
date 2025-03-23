@@ -1,44 +1,23 @@
 class CommentModel {
-  String? collectionId;
-  String? collectionName;
-  String? created;
-  String? id;
-  String? productId;
-  String? text;
-  String? updated;
-  String? userId;
+  String id;
+  String text;
+  String productId;
+  String userId;
+  String userThumbnailUrl;
+  String username;
+  String avatar;
 
-  CommentModel(
-      {this.collectionId,
-      this.collectionName,
-      this.created,
-      this.id,
-      this.productId,
-      this.text,
-      this.updated,
-      this.userId});
+  CommentModel(this.id, this.text, this.productId, this.userId,
+      this.userThumbnailUrl, this.username, this.avatar);
 
-  CommentModel.fromJson(Map<String, dynamic> json) {
-    collectionId = json['collectionId'];
-    collectionName = json['collectionName'];
-    created = json['created'];
-    id = json['id'];
-    productId = json['product_id'];
-    text = json['text'];
-    updated = json['updated'];
-    userId = json['user_id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['collectionId'] = collectionId;
-    data['collectionName'] = collectionName;
-    data['created'] = created;
-    data['id'] = id;
-    data['product_id'] = productId;
-    data['text'] = text;
-    data['updated'] = updated;
-    data['user_id'] = userId;
-    return data;
+  factory CommentModel.fromMapJson(Map<String, dynamic> jsonObject) {
+    return CommentModel(
+        jsonObject['id'],
+        jsonObject['text'],
+        jsonObject['product_id'],
+        jsonObject['user_id'],
+        'http://startflutter.ir/api/files/${jsonObject['expand']['user_id']['collectionName']}/${jsonObject['expand']['user_id']['id']}/${jsonObject['expand']['user_id']['avatar']}',
+        jsonObject['expand']['user_id']['name'],
+        jsonObject['expand']['user_id']['avatar']);
   }
 }

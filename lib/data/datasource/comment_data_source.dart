@@ -13,11 +13,14 @@ class CommentRemoteDataSource extends ICommentDataSource {
   Future<List<CommentModel>> getComment(String productId) async {
     try {
       Response response = await httpClinet.get('comment/records',
-          queryParameters: {"filter": "product_id =\"$productId\""});
+          queryParameters: {
+            "filter": 'product_id="$productId"',
+            "expand": "user_id"
+          });
 
       return response.data['items']
           .map<CommentModel>(
-            (json) => CommentModel.fromJson(json),
+            (json) => CommentModel.fromMapJson(json),
           )
           .toList();
     } on DioException catch (ex) {

@@ -13,6 +13,7 @@ import 'package:apple_shop/data/repository/category_repositroy.dart';
 import 'package:apple_shop/data/repository/comment_reppositroy.dart';
 import 'package:apple_shop/data/repository/prodoct_repositroy.dart';
 import 'package:apple_shop/data/repository/singleProduct_repositroy.dart';
+import 'package:apple_shop/utils/dio_provider.dart';
 import 'package:apple_shop/utils/payment_handler.dart';
 import 'package:apple_shop/utils/url_handler.dart';
 import 'package:dio/dio.dart';
@@ -29,12 +30,11 @@ Future<void> getItInit() async {
   ));
 
   //Conponents
-  locator.registerSingleton<Dio>(Dio(
-    BaseOptions(baseUrl: 'https://startflutter.ir/api/collections/'),
-  ));
   locator.registerSingleton<SharedPreferences>(
     await SharedPreferences.getInstance(),
   );
+
+  locator.registerSingleton<Dio>(DioProvider.createDio());
 
   // dataSorce
   locator.registerFactory<IAuthRemoteDataSorce>(

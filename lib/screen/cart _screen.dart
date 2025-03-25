@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:uni_links/uni_links.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:zarinpal/zarinpal.dart';
 
 class CartScreen extends StatefulWidget {
@@ -101,6 +100,7 @@ class _CartScreenState extends State<CartScreen> {
                                 return CartItem(
                                   themeData: themeData,
                                   cartItem: cartItem[index],
+                                  index: index,
                                 );
                               },
                               childCount: cartItem.length,
@@ -115,36 +115,49 @@ class _CartScreenState extends State<CartScreen> {
               if (state is CartSucessState) ...{
                 GestureDetector(
                   onTap: () {
-                    ZarinPal().startPayment(
-                      _paymentRequest,
-                      (status, paymentGatewayUri, data) {
-                        try {
-                          if (status == 100) {
-                            launchUrl(
-                              Uri.parse(paymentGatewayUri!),
-                              mode: LaunchMode.externalApplication,
-                            );
-                          }
-                        } catch (e) {
-                          print(e);
-                        }
-                      },
-                    );
+                    // ZarinPal().startPayment(
+                    //   _paymentRequest,
+                    //   (status, paymentGatewayUri, data) {
+                    //     try {
+                    //       if (status == 100) {
+                    //         launchUrl(
+                    //           Uri.parse(paymentGatewayUri!),
+                    //           mode: LaunchMode.externalApplication,
+                    //         );
+                    //       }
+                    //     } catch (e) {
+                    //       print(e);
+                    //     }
+                    //   },
+                    // );
+                    context.read<CartBloc>().add(BasketPaymentInitEvent());
+                    context.read<CartBloc>().add(BasketPaymentRequestEvent());
                   },
                   child: Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                      height: 50,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppColor.greenColor,
-                        borderRadius: BorderRadius.circular(
-                          20,
-                        ),
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                    height: 50,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColor.greenColor,
+                      borderRadius: BorderRadius.circular(
+                        20,
                       ),
-                      child: state.finalPrice == 0
-                          ? Text('سبد خرید شما خالی هست')
-                          : Text('${state.finalPrice} '.seRagham())),
+                    ),
+                    child: state.finalPrice == 0
+                        ? Text(
+                            'سبد خرید شما خالی هست',
+                            style: TextStyle(
+                              color: AppColor.scaffoldColor,
+                            ),
+                          )
+                        : Text(
+                            '${state.finalPrice} '.seRagham(),
+                            style: TextStyle(
+                              color: AppColor.scaffoldColor,
+                            ),
+                          ),
+                  ),
                 )
               }
             ],
@@ -157,10 +170,12 @@ class _CartScreenState extends State<CartScreen> {
 
 class CartItem extends StatelessWidget {
   final CartItemModel cartItem;
+  final int index;
   const CartItem({
     super.key,
     required this.themeData,
     required this.cartItem,
+    required this.index,
   });
 
   final ThemeData themeData;
@@ -237,23 +252,30 @@ class CartItem extends StatelessWidget {
                             'test',
                             color: 'eeeeee',
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: AppColor.redColor,
+                          GestureDetector(
+                            onTap: () {
+                              context
+                                  .read<CartBloc>()
+                                  .add(BasketRemoveEvent(index: index));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: AppColor.redColor,
+                                  ),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 2,
+                                  horizontal: 6,
                                 ),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 2,
-                                horizontal: 6,
-                              ),
-                              child: Row(
-                                spacing: 4,
-                                children: [
-                                  Assets.img.iconTrash.image(),
-                                  Text('حذف'),
-                                ],
+                                child: Row(
+                                  spacing: 4,
+                                  children: [
+                                    Assets.img.iconTrash.image(),
+                                    Text('حذف'),
+                                  ],
+                                ),
                               ),
                             ),
                           )

@@ -153,6 +153,10 @@ class DetailContentWidget extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
+                        isDismissible: true,
+                        isScrollControlled: true,
+                        useSafeArea: true,
+                        showDragHandle: true,
                         context: context,
                         builder: (context) {
                           return BlocProvider(
@@ -162,16 +166,8 @@ class DetailContentWidget extends StatelessWidget {
                                     productId: parentWidget.singleProduct.id!));
                                 return bloc;
                               },
-                              child: DraggableScrollableSheet(
-                                initialChildSize: 0.5,
-                                minChildSize: 0.2,
-                                maxChildSize: 0.7,
-                                builder: (context, scrollController) {
-                                  return CommentBottomSheet(
-                                    controller: scrollController,
-                                    productId: parentWidget.singleProduct.id!,
-                                  );
-                                },
+                              child: CommentBottomSheet(
+                                productId: parentWidget.singleProduct.id!,
                               ));
                         },
                       );
@@ -292,10 +288,9 @@ class DetailContentWidget extends StatelessWidget {
 
 class CommentBottomSheet extends StatefulWidget {
   final String productId;
-  final ScrollController controller;
+
   const CommentBottomSheet({
     super.key,
-    required this.controller,
     required this.productId,
   });
 
@@ -335,7 +330,6 @@ class _CommentBottomSheetState extends State<CommentBottomSheet> {
           builder: (context, state) {
             return Expanded(
               child: CustomScrollView(
-                controller: widget.controller,
                 slivers: [
                   if (state is CommentLoadingState) ...{
                     SliverToBoxAdapter(

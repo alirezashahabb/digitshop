@@ -27,10 +27,22 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         );
       }
       if (event is BasketPaymentInitEvent) {
-        _paymentHandler.initPaymentRequest(12000);
+        var finalPrice = await cartItem.getBasketFinalPrice();
+        _paymentHandler.initPaymentRequest(finalPrice);
       }
       if (event is BasketPaymentRequestEvent) {
         _paymentHandler.sendPaymentRequest();
+      }
+      if (event is BasketRemoveEvent) {
+        cartItem.removeCart(event.index);
+        var respose = await cartItem.getCartItem();
+        var finalPrice = await cartItem.getBasketFinalPrice();
+        emit(
+          CartSucessState(
+            cartItem: respose,
+            finalPrice: finalPrice,
+          ),
+        );
       }
     });
   }

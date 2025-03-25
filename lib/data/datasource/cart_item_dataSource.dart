@@ -5,6 +5,7 @@ abstract class ICartItemeDataSorce {
   Future<void> addCartItem(CartItemModel cartItem);
   Future<List<CartItemModel>> cartItemList();
   Future<int> getBasketFinalPrice();
+  Future<void> removeCart(int index);
 }
 
 class CartItemLocalDataSource implements ICartItemeDataSorce {
@@ -28,5 +29,10 @@ class CartItemLocalDataSource implements ICartItemeDataSorce {
         items.fold(0, (acmolatro, prodoct) => acmolatro + prodoct.realPeice!);
 
     return finalPrice;
+  }
+
+  @override
+  Future<void> removeCart(int index) async {
+    box.deleteAt(index);
   }
 }

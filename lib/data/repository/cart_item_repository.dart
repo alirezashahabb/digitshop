@@ -8,6 +8,7 @@ abstract class ICartItemRepositroy {
   Future<Either<String, String>> addCartItem(CartItemModel cartItem);
   Future<Either<String, List<CartItemModel>>> getCartItem();
   Future<int> getBasketFinalPrice();
+  Future<void> removeCart(int index);
 }
 
 class CartItemRepository implements ICartItemRepositroy {
@@ -35,5 +36,10 @@ class CartItemRepository implements ICartItemRepositroy {
   @override
   Future<int> getBasketFinalPrice() async {
     return cartItemeDataSorce.getBasketFinalPrice();
+  }
+
+  @override
+  Future<void> removeCart(int index) async {
+    cartItemeDataSorce.removeCart(index);
   }
 }

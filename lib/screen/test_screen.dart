@@ -15,7 +15,7 @@ class TestScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () async {
-                AuthRepositroy().login(
+                await AuthRepositroy().login(
                   'alirezash',
                   '12345678',
                 );

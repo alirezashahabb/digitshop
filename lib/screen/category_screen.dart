@@ -3,6 +3,7 @@ import 'package:apple_shop/gen/assets.gen.dart';
 import 'package:apple_shop/model/category_model.dart';
 import 'package:apple_shop/theme.dart';
 import 'package:apple_shop/utils/image_loading_service.dart';
+import 'package:apple_shop/utils/loading_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,7 +45,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             builder: (context, state) {
               if (state is CategoryInitState) {
                 return SliverToBoxAdapter(
-                  child: CircularProgressIndicator(),
+                  child: LoadingAnimation(),
                 );
               } else if (state is CategoryRepoanseState) {
                 return state.items.fold(

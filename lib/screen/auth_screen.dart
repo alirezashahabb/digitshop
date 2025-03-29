@@ -2,6 +2,7 @@ import 'package:apple_shop/bloc/auth/auth_bloc.dart';
 import 'package:apple_shop/gen/assets.gen.dart';
 import 'package:apple_shop/screen/home_screen.dart';
 import 'package:apple_shop/theme.dart';
+import 'package:apple_shop/utils/navigator.dart';
 import 'package:apple_shop/utils/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,11 +106,11 @@ class _AuthScreenState extends State<AuthScreen> {
                           child: BlocConsumer<AuthBloc, AuthState>(
                             listener: (context, state) {
                               if (state is AutResponseState) {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => HomeScreen(),
-                                  ),
-                                );
+                                goScreen(
+                                    context: context,
+                                    screen: HomeScreen(),
+                                    closeScreen: true,
+                                    fullScreen: false);
                                 state.response.fold(
                                   (r) {
                                     return showCustomAlert(context, r);

@@ -29,7 +29,11 @@ class AuthremoteDataSource extends IAuthRemoteDataSorce {
         },
       );
     } on DioException catch (ex) {
-      throw ApiException(ex.response?.statusCode, ex.response?.data['message']);
+      throw ApiException(
+        ex.response?.statusCode,
+        ex.response?.data['message'],
+        response: ex.response,
+      );
     } catch (ex) {
       throw ApiException(0, 'خطا نا مشخص');
     }

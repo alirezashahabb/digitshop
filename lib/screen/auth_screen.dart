@@ -106,20 +106,18 @@ class _AuthScreenState extends State<AuthScreen> {
                           child: BlocConsumer<AuthBloc, AuthState>(
                             listener: (context, state) {
                               if (state is AutResponseState) {
-                                goScreen(
-                                    context: context,
-                                    screen: HomeScreen(),
-                                    closeScreen: true,
-                                    fullScreen: false);
                                 state.response.fold(
                                   (r) {
-                                    return showCustomAlert(context, r);
+                                    goScreen(
+                                        context: context,
+                                        screen: HomeScreen(),
+                                        closeScreen: true,
+                                        fullScreen: false);
+                                    showCustomAlert(context, r);
                                   },
                                   (l) {
-                                    return showCustomAlert(
-                                      context,
-                                      l,
-                                    );
+                                    showCustomAlert(
+                                        context, l, AlertType.error);
                                   },
                                 );
                               }

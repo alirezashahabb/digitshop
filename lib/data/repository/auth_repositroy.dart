@@ -48,7 +48,7 @@ class AuthRepositroy extends IAuthRepositroy {
       );
       if (token.isNotEmpty) {
         AuthManager.saveToken(token);
-        return right('شما با موفقیت وارد شدید');
+        return right('به اپل شاپ خوش آمدید');
       } else {
         return left('در ورود خطایی رخ داده هست');
       }

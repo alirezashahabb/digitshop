@@ -21,7 +21,7 @@ class AuthremoteDataSource extends IAuthRemoteDataSorce {
   Future<void> register(
       String userName, String password, String confirmePassword) async {
     try {
-      await httpClient.post(
+      Response response = await httpClient.post(
         'users/records',
         data: {
           'username': userName,
@@ -29,6 +29,9 @@ class AuthremoteDataSource extends IAuthRemoteDataSorce {
           'passwordConfirm': confirmePassword,
         },
       );
+      if (response.statusCode == 200) {
+        AuthManager.saveId(response.data?['id']);
+      }
     } on DioException catch (ex) {
       throw ApiException(
         ex.response?.statusCode,

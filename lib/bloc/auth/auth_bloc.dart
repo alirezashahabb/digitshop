@@ -11,20 +11,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   //Feild Injection
   final IAuthRepositroy repositroy = locator.get();
   AuthBloc() : super(AuthInitSate()) {
-    on<AuthEvent>((event, emit) async {
-      if (event is AuthLoginEvent) {
-        emit(AuthLoadingSate());
-        try {
+    on<AuthEvent>(
+      (event, emit) async {
+        if (event is AuthLoginEvent) {
+          emit(AuthLoadingSate());
           var reaponse = await repositroy.login(event.userName, event.password);
           emit(
             AutResponseState(response: reaponse),
           );
-        } catch (e) {
+        }
+        if (event is AuthSignInEvent) {
+          emit(AuthLoadingSate());
+          var reaponse = await repositroy.register(
+            event.userName,
+            event.password,
+            event.confirmPassword,
+          );
           emit(
-            AutErrorSate(error: ''),
+            AutResponseState(response: reaponse),
           );
         }
-      }
-    });
+      },
+    );
   }
 }

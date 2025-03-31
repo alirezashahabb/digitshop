@@ -107,17 +107,22 @@ class _AuthScreenState extends State<AuthScreen> {
                             listener: (context, state) {
                               if (state is AutResponseState) {
                                 state.response.fold(
-                                  (r) {
-                                    goScreen(
-                                        context: context,
-                                        screen: HomeScreen(),
-                                        closeScreen: true,
-                                        fullScreen: false);
-                                    showCustomAlert(context, r);
-                                  },
-                                  (l) {
+                                  (error) {
                                     showCustomAlert(
-                                        context, l, AlertType.error);
+                                      context,
+                                      error,
+                                      AlertType.error,
+                                    );
+                                  },
+                                  (response) {
+                                    showCustomAlert(
+                                      context,
+                                      response,
+                                    );
+                                    goScreen(
+                                      context: context,
+                                      screen: HomeScreen(),
+                                    );
                                   },
                                 );
                               }

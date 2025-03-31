@@ -1,4 +1,5 @@
 import 'package:apple_shop/utils/api_exception.dart';
+import 'package:apple_shop/utils/auth_manager.dart';
 import 'package:apple_shop/utils/di.dart';
 import 'package:dio/dio.dart';
 
@@ -51,6 +52,7 @@ class AuthremoteDataSource extends IAuthRemoteDataSorce {
         },
       );
       if (response.statusCode == 200) {
+        AuthManager.saveId(response.data?['record']['id']);
         return response.data?['token'];
       }
     } on DioException catch (ex) {

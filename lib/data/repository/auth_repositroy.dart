@@ -1,6 +1,5 @@
 import 'package:apple_shop/data/datasource/auth_datasource.dart';
 import 'package:apple_shop/utils/api_exception.dart';
-import 'package:apple_shop/utils/auth_manager.dart';
 import 'package:apple_shop/utils/di.dart';
 import 'package:dartz/dartz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,7 +46,6 @@ class AuthRepositroy extends IAuthRepositroy {
         password,
       );
       if (token.isNotEmpty) {
-        AuthManager.saveToken(token);
         return right('به اپل شاپ خوش آمدید');
       } else {
         return left('در ورود خطایی رخ داده هست');

@@ -1,4 +1,4 @@
-import 'package:apple_shop/screen/auth_screen.dart';
+import 'package:apple_shop/screen/login_screen.dart';
 import 'package:apple_shop/utils/auth_manager.dart';
 import 'package:apple_shop/utils/navigator.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class ProfileScreen extends StatelessWidget {
               AuthManager.logout();
               goScreen(
                   context: context,
-                  screen: AuthScreen(),
+                  screen: LoginScreen(),
                   closeScreen: true,
                   fullScreen: false);
             },

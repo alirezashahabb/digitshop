@@ -17,7 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(AuthLoadingSate());
           var reaponse = await repositroy.login(event.userName, event.password);
           emit(
-            AutResponseState(response: reaponse),
+            AuthResponseState(response: reaponse),
           );
         }
         if (event is AuthSignInEvent) {
@@ -28,7 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             event.confirmPassword,
           );
           emit(
-            AutResponseState(response: reaponse),
+            AuthResponseState(response: reaponse),
           );
         }
       },

@@ -7,10 +7,10 @@ final class AuthLoadingSate extends AuthState {}
 
 final class AuthInitSate extends AuthState {}
 
-final class AutResponseState extends AuthState {
+final class AuthResponseState extends AuthState {
   final Either<String, String> response;
 
-  AutResponseState({required this.response});
+  AuthResponseState({required this.response});
 }
 
 final class AutErrorSate extends AuthState {

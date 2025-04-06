@@ -27,10 +27,14 @@ class AuthremoteDataSource extends IAuthRemoteDataSorce {
           'username': userName,
           'password': password,
           'passwordConfirm': confirmePassword,
+          'name': userName,
         },
       );
       if (response.statusCode == 200) {
-        AuthManager.saveId(response.data?['id']);
+        login(
+          userName,
+          password,
+        );
       }
     } on DioException catch (ex) {
       throw ApiException(
@@ -56,6 +60,7 @@ class AuthremoteDataSource extends IAuthRemoteDataSorce {
       );
       if (response.statusCode == 200) {
         AuthManager.saveId(response.data?['record']['id']);
+        AuthManager.saveToken(response.data?['token']);
         return response.data?['token'];
       }
     } on DioException catch (ex) {

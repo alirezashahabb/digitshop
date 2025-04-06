@@ -6,7 +6,7 @@ import 'package:apple_shop/bloc/home/home_bloc.dart';
 import 'package:apple_shop/bloc/prodoct/prodoct_list_bloc.dart';
 import 'package:apple_shop/bloc/productSingle/productsingle_bloc.dart';
 import 'package:apple_shop/model/cart_item_model.dart';
-import 'package:apple_shop/screen/auth_screen.dart';
+import 'package:apple_shop/screen/login_screen.dart';
 import 'package:apple_shop/screen/root_screen.dart';
 import 'package:apple_shop/theme.dart';
 import 'package:apple_shop/utils/auth_manager.dart';
@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'AppleShop',
       theme: lightThemeData(),
-      home: AuthManager.isLogedin() ? RootScreen() : AuthScreen(),
+      home: AuthManager.isLogedin() ? RootScreen() : LoginScreen(),
     );
   }
 }
